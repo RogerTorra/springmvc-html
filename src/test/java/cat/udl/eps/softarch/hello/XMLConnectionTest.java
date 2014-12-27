@@ -45,7 +45,7 @@ public class XMLConnectionTest {
         OutputStream testFile = new FileOutputStream("C:\\Users\\roger\\IdeaProjects\\springmvc-html\\src\\test\\java\\cat\\udl\\eps\\softarch\\hello\\testXML");
         copy(xml,testFile);
     }
-/*
+
     @Test
     public void stepOneTest() throws IOException, XQException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         String eventXQ =
@@ -67,7 +67,7 @@ public class XMLConnectionTest {
         System.out.println("test:");
         System.out.println(result.size());
     }
-*/
+
     @Test
     public void staticFileTest() throws ClassNotFoundException, IllegalAccessException, InstantiationException, XQException, FileNotFoundException {
 
