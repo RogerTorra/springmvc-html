@@ -42,6 +42,7 @@ public class XMLConnectionTest {
         URLConnection urlconn = url.openConnection();
         urlconn.setReadTimeout(50000);
         InputStream xml = urlconn.getInputStream();
+        //TODO Change local path file
         OutputStream testFile = new FileOutputStream("C:\\Users\\roger\\IdeaProjects\\springmvc-html\\src\\test\\java\\cat\\udl\\eps\\softarch\\hello\\testXML");
         copy(xml,testFile);
     }
@@ -58,6 +59,7 @@ public class XMLConnectionTest {
         URLConnection urlconn = url.openConnection();
         urlconn.setReadTimeout(50000);
         InputStream xml = urlconn.getInputStream();
+        //TODO Change local path file
         OutputStream testFile = new FileOutputStream("C:\\Users\\roger\\IdeaProjects\\springmvc-html\\src\\test\\java\\cat\\udl\\eps\\softarch\\hello\\testXML");
         copy(xml,testFile);
 
@@ -73,6 +75,7 @@ public class XMLConnectionTest {
 
         XQPreparedExpression expr;
         XQConnection conn;
+        //TODO Change local path file
         InputStream testFile = new FileInputStream("C:\\Users\\roger\\IdeaProjects\\springmvc-html\\src\\test\\java\\cat\\udl\\eps\\softarch\\hello\\testXML");
         String xqueryString =
                 " declare variable $doc external;\n" +
