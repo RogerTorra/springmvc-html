@@ -30,11 +30,11 @@ public class Greeting {
     private String email;
 
     @NotNull
-    private Date date;
+    private String date;
 
     public Greeting() {}
 
-    public Greeting(String content, String email, Date date) {
+    public Greeting(String content, String email, String date) {
         this.content = content;
         this.email = email;
         this.date = date;
@@ -50,7 +50,7 @@ public class Greeting {
 
     public void setEmail(String email) { this.email = email; }
 
-    public Date getDate() { return date; }
+    public String getDate() { return date; }
 
-    public void setDate(Date date) { this.date = date; }
+    public void setDate(String date) { this.date = date; }
 }

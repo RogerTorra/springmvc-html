@@ -44,7 +44,7 @@ public class GreetingControllerTest {
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
         if (greetingRepository.count()==0) {
-            Greeting g = new Greeting("test1", "test@example.org", new Date());
+            Greeting g = new Greeting("test1", "test@example.org", new Date().toString());
             greetingRepository.save(g);
         }
     }
@@ -91,7 +91,7 @@ public class GreetingControllerTest {
 
     @Test
     public void testCreate() throws Exception {
-        Greeting last = new Greeting("last", "test@example.org", new Date());
+        Greeting last = new Greeting("last", "test@example.org", new Date().toString());
         int nextGreetingId = Ints.checkedCast(greetingRepository.save(last).getId())+1;
         int startSize = Ints.checkedCast(greetingRepository.count());
 
@@ -138,7 +138,7 @@ public class GreetingControllerTest {
 
     @Test
     public void testUpdate() throws Exception {
-        Greeting tobeupdated = greetingRepository.save(new Greeting("tobeupdated", "a@b.net", new Date()));
+        Greeting tobeupdated = greetingRepository.save(new Greeting("tobeupdated", "a@b.net", new Date().toString()));
         int startSize = Ints.checkedCast(greetingRepository.count());
 
         mockMvc.perform(put("/greetings/{id}", tobeupdated.getId())
@@ -156,7 +156,7 @@ public class GreetingControllerTest {
 
     @Test
     public void testUpdateEmpty() throws Exception {
-        Greeting tobeupdated = greetingRepository.save(new Greeting("tobeupdated", "a@b.net", new Date()));
+        Greeting tobeupdated = greetingRepository.save(new Greeting("tobeupdated", "a@b.net", new Date().toString()));
         int startSize = Ints.checkedCast(greetingRepository.count());
 
         mockMvc.perform(put("/greetings/{id}", tobeupdated.getId())
@@ -208,7 +208,7 @@ public class GreetingControllerTest {
 
     @Test
     public void testDeleteExisting() throws Exception {
-        Greeting toBeRemoved = greetingRepository.save(new Greeting("toberemoved", "a@b.net", new Date()));
+        Greeting toBeRemoved = greetingRepository.save(new Greeting("toberemoved", "a@b.net", new Date().toString()));
         int startSize = Ints.checkedCast(greetingRepository.count());
 
         mockMvc.perform(delete("/greetings/{id}", toBeRemoved.getId()).accept(MediaType.TEXT_HTML))

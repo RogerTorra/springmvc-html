@@ -16,7 +16,7 @@ public class GreetingHomeController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String redirect() {
         logger.info("Redirect to home page");
-        return "redirect:/greetings";
+        return "redirect:/actes";
     }
 
 }

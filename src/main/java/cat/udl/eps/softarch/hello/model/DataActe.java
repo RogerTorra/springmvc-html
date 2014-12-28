@@ -7,9 +7,9 @@ import java.util.Date;
 /**
  * Created by roger on 24/12/2014.
  */
-@Entity
+
 public class DataActe {
 
-    @NotNull
+
     private Date date;
 }

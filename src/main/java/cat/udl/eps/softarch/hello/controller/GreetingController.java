@@ -77,7 +77,7 @@ public class GreetingController {
     public ModelAndView createForm() {
         logger.info("Generating form for greeting creation");
         Greeting emptyGreeting = new Greeting();
-        emptyGreeting.setDate(new Date());
+        emptyGreeting.setDate(new Date().toString());
         return new ModelAndView("form", "greeting", emptyGreeting);
     }
 
