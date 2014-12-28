@@ -43,7 +43,7 @@ public class XMLConnectionTest {
         urlconn.setReadTimeout(50000);
         InputStream xml = urlconn.getInputStream();
         //TODO Change local path file
-        OutputStream testFile = new FileOutputStream("C:\\Users\\roger\\IdeaProjects\\springmvc-html\\src\\test\\java\\cat\\udl\\eps\\softarch\\hello\\testXML");
+        OutputStream testFile = new FileOutputStream("C:\\Users\\roger\\IdeaProjects\\springmvc-html\\src\\test\\java\\cat\\udl\\eps\\softarch\\hello\\testXML.xml");
         copy(xml,testFile);
     }
 
@@ -51,8 +51,7 @@ public class XMLConnectionTest {
     public void stepOneTest() throws IOException, XQException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         String eventXQ =
                 " declare variable $doc external;\n" +
-                        " for $r in $doc//actes/nom/text()\n" +
-                        " return $r";
+                "for $x in $doc return $x//acte/nom/text()";
 
         url = new URL("http://w10.bcn.es/APPS/asiasiacache/peticioXmlAsia?id=203");
 
@@ -60,12 +59,12 @@ public class XMLConnectionTest {
         urlconn.setReadTimeout(50000);
         InputStream xml = urlconn.getInputStream();
         //TODO Change local path file
-        OutputStream testFile = new FileOutputStream("C:\\Users\\roger\\IdeaProjects\\springmvc-html\\src\\test\\java\\cat\\udl\\eps\\softarch\\hello\\testXML");
+        OutputStream testFile = new FileOutputStream("C:\\Users\\roger\\IdeaProjects\\springmvc-html\\src\\test\\java\\cat\\udl\\eps\\softarch\\hello\\testXML.xml");
         copy(xml,testFile);
 
         XMLConnection testcon = new XMLConnection(eventXQ, url);
         ArrayList<String> result = testcon.getEvents();
-        assertEquals(55,result.size());
+        assertEquals(54,result.size());
         System.out.println("test:");
         System.out.println(result.size());
     }
@@ -76,10 +75,10 @@ public class XMLConnectionTest {
         XQPreparedExpression expr;
         XQConnection conn;
         //TODO Change local path file
-        InputStream testFile = new FileInputStream("C:\\Users\\roger\\IdeaProjects\\springmvc-html\\src\\test\\java\\cat\\udl\\eps\\softarch\\hello\\testXML");
+        InputStream testFile = new FileInputStream("C:\\Users\\roger\\IdeaProjects\\springmvc-html\\src\\test\\java\\cat\\udl\\eps\\softarch\\hello\\testXML.xml");
         String xqueryString =
                 " declare variable $doc external;\n" +
-                "for $x in $doc//actes return $x/nom/text()";
+                "for $x in $doc return $x//acte/nom/text()";
 
         XQDataSource xqds = (XQDataSource)Class.forName("net.sf.saxon.xqj.SaxonXQDataSource").newInstance();
         conn = xqds.getConnection();
