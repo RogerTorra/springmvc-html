@@ -1,10 +1,12 @@
 package cat.udl.eps.softarch.hello;
+import cat.udl.eps.softarch.hello.model.Acte;
 import cat.udl.eps.softarch.hello.repository.XMLConnection;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 import javax.validation.constraints.AssertTrue;
+import javax.xml.bind.JAXBException;
 import javax.xml.xquery.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -48,7 +50,7 @@ public class XMLConnectionTest {
     }
 
     @Test
-    public void stepOneTest() throws IOException, XQException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public void stepOneTest() throws IOException, XQException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException {
         String eventXQ =
                 " declare variable $doc external;\n" +
                 "for $x in $doc return $x//acte/nom/text()";
@@ -63,7 +65,7 @@ public class XMLConnectionTest {
         copy(xml,testFile);
 
         XMLConnection testcon = new XMLConnection(eventXQ, url);
-        ArrayList<String> result = testcon.getEvents();
+        ArrayList<Acte> result = testcon.getEvents();
         assertEquals(54,result.size());
         System.out.println("test:");
         System.out.println(result.size());
