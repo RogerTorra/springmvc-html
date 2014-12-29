@@ -35,7 +35,7 @@ public class XMLConnection {
         this.expr = conn.prepareExpression(xquery);
         this.expr.bindDocument(new javax.xml.namespace.QName("doc"), urlconn.getInputStream(), null, null);
 
-        //this.jaxbContext = JAXBContext.newInstance(Song.class);
+        this.jaxbContext = JAXBContext.newInstance(Acte.class);
         this.jaxbUnmarshaller = jaxbContext.createUnmarshaller();
     }
 

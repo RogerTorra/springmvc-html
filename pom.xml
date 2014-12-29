@@ -91,15 +91,18 @@
         <!-- XML -->
         <dependency>
             <groupId>net.sf.saxon</groupId>
-            <artifactId>Saxon-HE</artifactId>
-            <version>9.5.1-5</version>
+            <artifactId>Saxon</artifactId>
+            <scope>system</scope>
+            <version>9.1.0.8</version>
+            <systemPath>${basedir}/lib/saxon-9.1.0.8.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>javax.xml.xquery</groupId>
-            <artifactId>xqj-api</artifactId>
-            <version>1.0</version>
+            <groupId>net.sf.saxon.xqj</groupId>
+            <artifactId>Saxon-xqj</artifactId>
+            <scope>system</scope>
+            <version>9.1.0.8</version>
+            <systemPath>${basedir}/lib/saxon-9.1.0.8-xqj.jar</systemPath>
         </dependency>
-
         <!-- Utils -->
         <dependency>
             <groupId>com.google.guava</groupId>
