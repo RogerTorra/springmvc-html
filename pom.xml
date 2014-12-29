@@ -90,17 +90,15 @@
         </dependency>
         <!-- XML -->
         <dependency>
-            <groupId>net.sourceforge.saxon</groupId>
-            <artifactId>saxon</artifactId>
-            <version>9.1.0.8</version>
-        </dependency>
-        <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
-            <version>9.4</version>
+            <version>9.5.1-5</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>javax.xml.xquery</groupId>
+            <artifactId>xqj-api</artifactId>
+            <version>1.0</version>
+        </dependency>
 
         <!-- Utils -->
         <dependency>

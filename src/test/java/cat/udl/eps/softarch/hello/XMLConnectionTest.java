@@ -8,6 +8,8 @@ import static org.junit.Assert.*;
 import javax.validation.constraints.AssertTrue;
 import javax.xml.bind.JAXBException;
 import javax.xml.xquery.*;
+
+import net.sf.saxon.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
