@@ -67,9 +67,10 @@ public class XMLConnectionTest {
 
         XMLConnection testcon = new XMLConnection(eventXQ, url);
         ArrayList<Acte> result = testcon.getEvents();
-        assertEquals(54,result.size());
         System.out.println("test:");
         System.out.println(result.size());
+        assertEquals(54,result.size());
+
     }
 
     @Test

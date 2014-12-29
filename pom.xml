@@ -88,7 +88,7 @@
             <artifactId>postgresql</artifactId>
             <version>9.3-1102-jdbc41</version>
         </dependency>
-        <!-- XML -->
+        <!-- XML
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon</artifactId>
@@ -96,12 +96,18 @@
             <version>9.1.0.8</version>
             <systemPath>${basedir}/lib/saxon-9.1.0.8.jar</systemPath>
         </dependency>
+
         <dependency>
             <groupId>net.sf.saxon.xqj</groupId>
             <artifactId>Saxon-xqj</artifactId>
             <scope>system</scope>
             <version>9.1.0.8</version>
             <systemPath>${basedir}/lib/saxon-9.1.0.8-xqj.jar</systemPath>
+        </dependency> -->
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>9.4</version>
         </dependency>
         <!-- Utils -->
         <dependency>

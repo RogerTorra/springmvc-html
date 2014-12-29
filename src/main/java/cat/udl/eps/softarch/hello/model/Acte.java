@@ -20,10 +20,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Acte {
 
     @Id
-    @XmlElement
     private long id;
 
-    @XmlElement
     @NotBlank(message = "Nom cannot be blank")
     private String nom;
 
@@ -38,13 +36,13 @@ public class Acte {
         this.date = date;
     }
 
-
+    @XmlElement
     public long getId() { return id; }
 
     public void setId(long id) {
         this.id = id;
     }
-
+    @XmlElement
     public String getNom() {
         return nom;
     }
