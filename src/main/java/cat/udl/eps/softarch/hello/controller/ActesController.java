@@ -110,7 +110,7 @@ public class ActesController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public Acte create(@Valid @RequestBody Acte acte, HttpServletResponse response) {
-        logger.info("Creating acte with nom'{}'", acte.getNom());
+        logger.info("Creating acte with nom'{}'", acte.getName());
         response.setHeader("Location", "/actes/" + actesRepository.save(acte).getId());
         return acte;
     }
@@ -127,7 +127,7 @@ public class ActesController {
     public ModelAndView createForm() {
         logger.info("Generating form for actes creation");
         Acte emptyActe = new Acte();
-        emptyActe.setData_inici(new Date().toString());
+        emptyActe.setInit_date(new Date().toString());
         return new ModelAndView("form", "acte", emptyActe);
     }
 
@@ -136,11 +136,11 @@ public class ActesController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Acte update(@PathVariable("id") Long id, @Valid @RequestBody Acte acte) {
-        logger.info("Updating acte {}, new name is '{}'", id, acte.getNom());
+        logger.info("Updating acte {}, new name is '{}'", id, acte.getName());
         Preconditions.checkNotNull(actesRepository.findOne(id), "Acte with id %s not found", id);
         Acte updateActe = actesRepository.findOne(id);
-        updateActe.setNom(acte.getNom());
-        updateActe.setData_inici(acte.getData_inici());
+        updateActe.setName(acte.getName());
+        updateActe.setInit_date(acte.getInit_date());
         return actesRepository.save(updateActe);
     }
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = "application/x-www-form-urlencoded")

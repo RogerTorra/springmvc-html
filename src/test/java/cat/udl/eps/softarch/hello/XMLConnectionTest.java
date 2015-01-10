@@ -17,6 +17,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.io.*;
+import java.util.List;
 import java.util.logging.Level;
 
 /**
@@ -123,8 +124,18 @@ public class XMLConnectionTest {
                         +"order by $r\n"
                         + "return\n"
                         + "<acte>\n"
-                        + "  <nom>{$r/nom/text()}</nom>\n"
-                        + "  <data_inici>{$r/data/data_inici/text()}</data_inici>\n"
+                        + "  <id>{$r/id/text()}</id>\n"
+                        + "  <name>{$r/nom/text()}</name>\n"
+                        + "  <init_date>{$r/data/data_inici/text()}</init_date>\n"
+                        + "  <start_time>{$r/data/hora_inici/text()}</start_time>\n"
+                        + "  <type>{$r/classificacions/nivell/text()}</type>\n"
+                        + "  <localization>{$r/lloc_simple/nom/text()}</localization>\n"
+                        + "  <street>{$r/lloc_simple/adreca_simple/carrer/text()}</street>\n"
+                        + "  <street_num>{$r/lloc_simple/adreca_simple/numero/text()}</street_num>\n"
+                        + "  <district>{$r/lloc_simple/adreca_simple/districte/text()}</district>\n"
+                        + "  <CP>{$r/lloc_simple/adreca_simple/codi_postal/text()}</CP>\n"
+                        + "  <x>{$r/lloc_simple/adreca_simple/coordenades/geocodificacio/data(@x)}</x>\n"
+                        + "  <y>{$r/lloc_simple/adreca_simple/coordenades/geocodificacio/data(@y)}</y>\n"
                         + "</acte>";
 
 
@@ -145,11 +156,11 @@ public class XMLConnectionTest {
 
         OutputStream testFile = new FileOutputStream(testXmlRoute);
 
+        List<Acte> actes= getActes(jaxbUnmarshaller,expr,conn);
 
+        //System.out.print(getActes(jaxbUnmarshaller,expr,conn));
 
-        System.out.print(getActes(jaxbUnmarshaller,expr,conn));
-
-        assertTrue(true);
+        assertTrue(!actes.isEmpty());
     }
 
 
@@ -165,7 +176,7 @@ public class XMLConnectionTest {
                // System.out.print(item);
                 Acte acte = (Acte) jaxbUnmarshaller.unmarshal(item.getNode());
                 songs.add(acte);
-                //System.out.print(acte);
+                System.out.print(acte+"\n");
             }
         }
         catch (Exception e) {
