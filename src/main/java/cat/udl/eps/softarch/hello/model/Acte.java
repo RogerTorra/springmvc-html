@@ -1,14 +1,10 @@
 package cat.udl.eps.softarch.hello.model;
 
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -27,13 +23,13 @@ public class Acte {
 
 
     @NotNull
-    private String date;
+    private String data_inici;
 
     public Acte() {}
 
-    public Acte(String nom, String date) {
+    public Acte(String nom, String data_inici) {
         this.nom = nom;
-        this.date = date;
+        this.data_inici = data_inici;
     }
 
     @XmlElement
@@ -51,7 +47,16 @@ public class Acte {
         this.nom = nom;
     }
 
-    public String getDate() { return date; }
+    public String getData_inici() { return data_inici; }
 
-    public void setDate(String date) { this.date = date; }
+    public void setData_inici(String data_inici) { this.data_inici = data_inici; }
+
+    @Override
+    public String toString() {
+        return "Acte{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", data_inici='" + data_inici + '\'' +
+                '}';
+    }
 }

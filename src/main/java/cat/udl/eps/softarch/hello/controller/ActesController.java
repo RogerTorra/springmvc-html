@@ -3,16 +3,10 @@ package cat.udl.eps.softarch.hello.controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
 
 import cat.udl.eps.softarch.hello.model.Acte;
-import cat.udl.eps.softarch.hello.model.Greeting;
 import cat.udl.eps.softarch.hello.repository.ActesRepository;
-import cat.udl.eps.softarch.hello.repository.GreetingRepository;
-import cat.udl.eps.softarch.hello.repository.XMLConnection;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,7 +127,7 @@ public class ActesController {
     public ModelAndView createForm() {
         logger.info("Generating form for actes creation");
         Acte emptyActe = new Acte();
-        emptyActe.setDate(new Date().toString());
+        emptyActe.setData_inici(new Date().toString());
         return new ModelAndView("form", "acte", emptyActe);
     }
 
@@ -146,7 +140,7 @@ public class ActesController {
         Preconditions.checkNotNull(actesRepository.findOne(id), "Acte with id %s not found", id);
         Acte updateActe = actesRepository.findOne(id);
         updateActe.setNom(acte.getNom());
-        updateActe.setDate(acte.getDate());
+        updateActe.setData_inici(acte.getData_inici());
         return actesRepository.save(updateActe);
     }
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = "application/x-www-form-urlencoded")

@@ -6,7 +6,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 import javax.validation.constraints.AssertTrue;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.xquery.*;
 import net.sf.saxon.xqj.*;
 import java.io.IOException;
@@ -15,6 +17,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.io.*;
+import java.util.logging.Level;
+
 /**
  * Created by roger on 17/12/2014.
  */
@@ -22,6 +26,7 @@ public class XMLConnectionTest {
 
     public URL url;
     private static final int BUFFER_SIZE = 8192;
+    private String testXmlRoute = "/home/hellfish90/IdeaProjects/springmvc-html/src/test/java/cat/udl/eps/softarch/hello/testXML.xml" ;
 
     public static long copy(InputStream is, OutputStream os) {
         byte[] buf = new byte[BUFFER_SIZE];
@@ -29,6 +34,7 @@ public class XMLConnectionTest {
         int len = 0;
         try {
             while (-1 != (len = is.read(buf))) {
+                //System.out.print(buf);
                 os.write(buf, 0, len);
                 total += len;
             }
@@ -39,15 +45,19 @@ public class XMLConnectionTest {
         return total;
     }
 
+
     @Test
     public void urlConnectionTest() throws Exception{
+
+
+
         url = new URL("http://w10.bcn.es/APPS/asiasiacache/peticioXmlAsia?id=203");
         URLConnection urlconn = url.openConnection();
         urlconn.setReadTimeout(50000);
         InputStream xml = urlconn.getInputStream();
         //TODO Change local path file
-        OutputStream testFile = new FileOutputStream("C:\\Users\\roger\\IdeaProjects\\springmvc-html\\src\\test\\java\\cat\\udl\\eps\\softarch\\hello\\testXML.xml");
-        copy(xml,testFile);
+        OutputStream testFile = new FileOutputStream(testXmlRoute);
+        //copy(xml,testFile);
     }
 
     @Test
@@ -62,7 +72,7 @@ public class XMLConnectionTest {
         urlconn.setReadTimeout(50000);
         InputStream xml = urlconn.getInputStream();
         //TODO Change local path file
-        OutputStream testFile = new FileOutputStream("C:\\Users\\roger\\IdeaProjects\\springmvc-html\\src\\test\\java\\cat\\udl\\eps\\softarch\\hello\\testXML.xml");
+        OutputStream testFile = new FileOutputStream(testXmlRoute);
         copy(xml,testFile);
 
         XMLConnection testcon = new XMLConnection(eventXQ, url);
@@ -73,13 +83,13 @@ public class XMLConnectionTest {
 
     }
 
-    @Test
+    //@Test
     public void staticFileTest() throws ClassNotFoundException, IllegalAccessException, InstantiationException, XQException, FileNotFoundException {
 
         XQPreparedExpression expr;
         XQConnection conn;
         //TODO Change local path file
-        InputStream testFile = new FileInputStream("C:\\Users\\roger\\IdeaProjects\\springmvc-html\\src\\test\\java\\cat\\udl\\eps\\softarch\\hello\\testXML.xml");
+        InputStream testFile = new FileInputStream(testXmlRoute);
         String xqueryString =
                 " declare variable $doc external;\n" +
                 "for $x in $doc return $x//acte/nom/text()";
@@ -95,5 +105,82 @@ public class XMLConnectionTest {
             System.out.println(rs.getItemAsString(null));
         assertNotNull(rs);
         conn.close();
+    }
+
+
+    @Test
+    public void xqueryTest() throws IOException, ClassNotFoundException, XQException, IllegalAccessException, InstantiationException, JAXBException {
+
+         XQPreparedExpression expr;
+         XQConnection         conn;
+
+         JAXBContext          jaxbContext;
+         Unmarshaller jaxbUnmarshaller;
+
+        String xquery =
+                        "declare variable $doc  external;\n"
+                        + "for $r in $doc /response/body/resultat/actes/* \n"
+                        +"order by $r\n"
+                        + "return\n"
+                        + "<acte>\n"
+                        + "  <nom>{$r/nom/text()}</nom>\n"
+                        + "  <data_inici>{$r/data/data_inici/text()}</data_inici>\n"
+                        + "</acte>";
+
+
+
+        url = new URL("http://w10.bcn.es/APPS/asiasiacache/peticioXmlAsia?id=203");
+
+        URLConnection urlconn = url.openConnection();
+        urlconn.setReadTimeout(50000);
+
+        XQDataSource xqds = (XQDataSource) Class.forName("net.sf.saxon.xqj.SaxonXQDataSource").newInstance();
+        conn = xqds.getConnection();
+        expr = conn.prepareExpression(xquery);
+        expr.bindDocument(new javax.xml.namespace.QName("doc"), urlconn.getInputStream(), null, null);
+
+        jaxbContext = JAXBContext.newInstance(Acte.class);
+        jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+
+        OutputStream testFile = new FileOutputStream(testXmlRoute);
+
+
+
+        System.out.print(getActes(jaxbUnmarshaller,expr,conn));
+
+        assertTrue(true);
+    }
+
+
+
+    ArrayList<Acte> getActes(Unmarshaller jaxbUnmarshaller,XQPreparedExpression expr, XQConnection conn) {
+        ArrayList<Acte> songs = new ArrayList<Acte>();
+        try {
+            XQResultSequence rs = expr.executeQuery();
+
+
+            while (rs.next()) {
+                XQItem item = rs.getItem();
+               // System.out.print(item);
+                Acte acte = (Acte) jaxbUnmarshaller.unmarshal(item.getNode());
+                songs.add(acte);
+                //System.out.print(acte);
+            }
+        }
+        catch (Exception e) {
+            //log.log(Level.SEVERE, e.getMessage());
+        }
+        finally { close(expr, conn); }
+        return songs;
+    }
+
+    private void close(XQPreparedExpression expr, XQConnection conn) {
+        try {
+            expr.close();
+           conn.close();
+        } catch (XQException e) {
+           // log.log(Level.SEVERE, e.getMessage());
+        }
     }
 }
