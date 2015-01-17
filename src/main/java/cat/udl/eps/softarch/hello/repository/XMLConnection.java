@@ -61,7 +61,7 @@ public class XMLConnection {
                 XQItem item = rs.getItem();
                 Acte acte = (Acte) jaxbUnmarshaller.unmarshal(item.getNode());
                 songs.add(acte);
-                System.out.print(acte + "\n");
+                //System.out.print(acte + "\n");
             }
         }
         catch (Exception e) {

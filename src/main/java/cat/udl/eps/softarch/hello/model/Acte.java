@@ -29,7 +29,7 @@ public class Acte {
     private String start_time;
 
     @NotNull
-    private List<String> type;
+    private String type;
 
     @NotNull
     private String localization;
@@ -72,11 +72,11 @@ public class Acte {
         return name;
     }
 
-    public List<String> getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(List<String> type) {
+    public void setType(String type) {
         this.type = type;
     }
 
