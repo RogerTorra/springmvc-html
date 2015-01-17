@@ -38,7 +38,8 @@ public class ActesController {
     ActesRepository actesRepository;
     JAXBContext  jaxbContext;
     Unmarshaller jaxbUnmarshaller;
-    private void retriveXMLEvent(){
+    private int retriveXMLEvent(){
+        int count=0;
         try {
 
             XQPreparedExpression expr;
@@ -77,7 +78,10 @@ public class ActesController {
 
             for (Acte acte : xmlPars.getActes(jaxbUnmarshaller,expr,conn)) {
                 actesRepository.save(acte).getId();
+                count++;
+
             }
+            return count;
         } catch (XQException e) {
             e.printStackTrace();
         }catch (ClassNotFoundException e) {
@@ -91,14 +95,14 @@ public class ActesController {
         } catch (JAXBException e) {
             e.printStackTrace();
         }
-
+        return 0;
     }
     // LIST
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Iterable<Acte> list(@RequestParam(required=false, defaultValue="0") int page,
                                @RequestParam(required=false, defaultValue="10") int size) {
-        retriveXMLEvent();
+        size = retriveXMLEvent();
         PageRequest request = new PageRequest(page, size);
         return actesRepository.findAll(request).getContent();
     }
