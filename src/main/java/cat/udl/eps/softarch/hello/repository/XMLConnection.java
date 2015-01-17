@@ -2,9 +2,16 @@ package cat.udl.eps.softarch.hello.repository;
 
 import cat.udl.eps.softarch.hello.model.Acte;
 
+import org.w3c.dom.Node;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.xquery.*;
 import java.io.IOException;
 import java.net.URL;
@@ -12,7 +19,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import java.io.StringWriter;
 /**
  * Created by roger on 29/12/2014.
  */
@@ -46,6 +53,7 @@ public class XMLConnection {
             while (rs.next()) {
                 XQItem item = rs.getItem();
                 Acte acte = (Acte) jaxbUnmarshaller.unmarshal(item.getNode());
+                log.log(Level.INFO, acte.toString());
                 actes.add(acte);
             }
         }
@@ -63,5 +71,17 @@ public class XMLConnection {
         } catch (XQException e) {
             log.log(Level.SEVERE, e.getMessage());
         }
+    }
+
+    public static String nodeToString(Node node) {
+        StringWriter sw = new StringWriter();
+        try {
+            Transformer t = TransformerFactory.newInstance().newTransformer();
+            t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            t.transform(new DOMSource(node), new StreamResult(sw));
+        } catch (TransformerException te) {
+            System.out.println("nodeToString Transformer Exception");
+        }
+        return sw.toString();
     }
 }

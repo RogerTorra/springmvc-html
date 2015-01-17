@@ -3,16 +3,10 @@ package cat.udl.eps.softarch.hello.controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
 
 import cat.udl.eps.softarch.hello.model.Acte;
-import cat.udl.eps.softarch.hello.model.Greeting;
 import cat.udl.eps.softarch.hello.repository.ActesRepository;
-import cat.udl.eps.softarch.hello.repository.GreetingRepository;
-import cat.udl.eps.softarch.hello.repository.XMLConnection;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,8 +58,8 @@ public class ActesController {
             while (rs.next()) {
                 XQItem item = rs.getItem();
                 Acte acte = null;
-                    acte = (Acte) jaxbUnmarshaller.unmarshal(item.getNode());
-                    actesRepository.save(acte).getId();
+                acte = (Acte) jaxbUnmarshaller.unmarshal(item.getNode());
+                actesRepository.save(acte).getId();
 
             }
         } catch (XQException e) {
@@ -83,11 +77,11 @@ public class ActesController {
         }
 
     }
-// LIST
+    // LIST
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Iterable<Acte> list(@RequestParam(required=false, defaultValue="0") int page,
-                                   @RequestParam(required=false, defaultValue="10") int size) {
+                               @RequestParam(required=false, defaultValue="10") int size) {
         retriveXMLEvent();
         PageRequest request = new PageRequest(page, size);
         return actesRepository.findAll(request).getContent();
@@ -98,7 +92,7 @@ public class ActesController {
         return new ModelAndView("actes", "actes", list(page, size));
     }
 
-// RETRIEVE
+    // RETRIEVE
     @RequestMapping(value = "/{id}", method = RequestMethod.GET )
     @ResponseBody
     public Acte retrieve(@PathVariable( "id" ) Long id) {
@@ -111,12 +105,12 @@ public class ActesController {
         return new ModelAndView("acte", "acte", retrieve(id));
     }
 
-// CREATE
+    // CREATE
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public Acte create(@Valid @RequestBody Acte acte, HttpServletResponse response) {
-        logger.info("Creating acte with nom'{}'", acte.getNom());
+        logger.info("Creating acte with nom'{}'", acte.getName());
         response.setHeader("Location", "/actes/" + actesRepository.save(acte).getId());
         return acte;
     }
@@ -133,26 +127,26 @@ public class ActesController {
     public ModelAndView createForm() {
         logger.info("Generating form for actes creation");
         Acte emptyActe = new Acte();
-        emptyActe.setDate(new Date().toString());
+        emptyActe.setInit_date(new Date().toString());
         return new ModelAndView("form", "acte", emptyActe);
     }
 
-// UPDATE
+    // UPDATE
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Acte update(@PathVariable("id") Long id, @Valid @RequestBody Acte acte) {
-        logger.info("Updating acte {}, new name is '{}'", id, acte.getNom());
+        logger.info("Updating acte {}, new name is '{}'", id, acte.getName());
         Preconditions.checkNotNull(actesRepository.findOne(id), "Acte with id %s not found", id);
         Acte updateActe = actesRepository.findOne(id);
-        updateActe.setNom(acte.getNom());
-        updateActe.setDate(acte.getDate());
+        updateActe.setName(acte.getName());
+        updateActe.setInit_date(acte.getInit_date());
         return actesRepository.save(updateActe);
     }
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = "application/x-www-form-urlencoded")
     @ResponseStatus(HttpStatus.OK)
     public String updateHTML(@PathVariable("id") Long id, @Valid @ModelAttribute("acte") Acte acte,
-                         BindingResult binding) {
+                             BindingResult binding) {
         if (binding.hasErrors()) {
             logger.info("Validation error: {}", binding);
             return "form";
@@ -167,7 +161,7 @@ public class ActesController {
         return new ModelAndView("form", "acte", actesRepository.findOne(id));
     }
 
-// DELETE
+    // DELETE
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("id") Long id) {
