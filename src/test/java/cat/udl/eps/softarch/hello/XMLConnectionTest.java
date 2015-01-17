@@ -173,7 +173,6 @@ public class XMLConnectionTest {
 
             while (rs.next()) {
                 XQItem item = rs.getItem();
-                // System.out.print(item);
                 Acte acte = (Acte) jaxbUnmarshaller.unmarshal(item.getNode());
                 songs.add(acte);
                 System.out.print(acte+"\n");
