@@ -7,6 +7,7 @@ import java.util.Date;
 
 import cat.udl.eps.softarch.hello.model.Acte;
 import cat.udl.eps.softarch.hello.repository.ActesRepository;
+import cat.udl.eps.softarch.hello.repository.XMLConnection;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,8 +36,8 @@ public class ActesController {
 
     @Autowired
     ActesRepository actesRepository;
-    private JAXBContext jaxbContext;
-    private Unmarshaller jaxbUnmarshaller;
+    JAXBContext  jaxbContext;
+    Unmarshaller jaxbUnmarshaller;
     private void retriveXMLEvent(){
         try {
 
@@ -45,8 +46,24 @@ public class ActesController {
             //TODO Change local path file
             InputStream testFile = new FileInputStream("C:\\Users\\roger\\IdeaProjects\\springmvc-html\\src\\test\\java\\cat\\udl\\eps\\softarch\\hello\\testXML.xml");
             String xqueryString =
-                    " declare variable $doc external;\n" +
-                            "for $x in $doc return $x//acte/nom/text()";
+                    "declare variable $doc  external;\n"
+                            + "for $r in $doc /response/body/resultat/actes/* \n"
+                            +"order by $r\n"
+                            + "return\n"
+                            + "<acte>\n"
+                            + "  <id>{$r/id/text()}</id>\n"
+                            + "  <name>{$r/nom/text()}</name>\n"
+                            + "  <init_date>{$r/data/data_inici/text()}</init_date>\n"
+                            + "  <start_time>{$r/data/hora_inici/text()}</start_time>\n"
+                            + "  <type>{$r/classificacions/nivell/text()}</type>\n"
+                            + "  <localization>{$r/lloc_simple/nom/text()}</localization>\n"
+                            + "  <street>{$r/lloc_simple/adreca_simple/carrer/text()}</street>\n"
+                            + "  <street_num>{$r/lloc_simple/adreca_simple/numero/text()}</street_num>\n"
+                            + "  <district>{$r/lloc_simple/adreca_simple/districte/text()}</district>\n"
+                            + "  <CP>{$r/lloc_simple/adreca_simple/codi_postal/text()}</CP>\n"
+                            + "  <x>{$r/lloc_simple/adreca_simple/coordenades/geocodificacio/data(@x)}</x>\n"
+                            + "  <y>{$r/lloc_simple/adreca_simple/coordenades/geocodificacio/data(@y)}</y>\n"
+                            + "</acte>";
 
             XQDataSource xqds = (XQDataSource)Class.forName("net.sf.saxon.xqj.SaxonXQDataSource").newInstance();
             conn = xqds.getConnection();
@@ -54,13 +71,12 @@ public class ActesController {
             expr.bindDocument(new javax.xml.namespace.QName("doc"), testFile, null, null);
 
             XQResultSequence rs = expr.executeQuery();
+            XMLConnection xmlPars = new XMLConnection();
+            jaxbContext = JAXBContext.newInstance(Acte.class);
+            jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-            while (rs.next()) {
-                XQItem item = rs.getItem();
-                Acte acte = null;
-                acte = (Acte) jaxbUnmarshaller.unmarshal(item.getNode());
+            for (Acte acte : xmlPars.getActes(jaxbUnmarshaller,expr,conn)) {
                 actesRepository.save(acte).getId();
-
             }
         } catch (XQException e) {
             e.printStackTrace();

@@ -24,6 +24,7 @@ import java.io.StringWriter;
  * Created by roger on 29/12/2014.
  */
 public class XMLConnection {
+
     private static final Logger log = Logger.getLogger(XMLConnection.class.getName());
 
     private XQPreparedExpression expr;
@@ -46,30 +47,36 @@ public class XMLConnection {
         this.jaxbUnmarshaller = jaxbContext.createUnmarshaller();
     }
 
-    public ArrayList<Acte> getEvents() {
-        ArrayList<Acte> actes = new ArrayList<Acte>();
+    public XMLConnection() {
+
+    }
+
+    public ArrayList<Acte> getActes(Unmarshaller jaxbUnmarshaller,XQPreparedExpression expr, XQConnection conn) {
+        ArrayList<Acte> songs = new ArrayList<Acte>();
         try {
-            XQResultSequence rs = this.expr.executeQuery();
+            XQResultSequence rs = expr.executeQuery();
+
+
             while (rs.next()) {
                 XQItem item = rs.getItem();
                 Acte acte = (Acte) jaxbUnmarshaller.unmarshal(item.getNode());
-                log.log(Level.INFO, acte.toString());
-                actes.add(acte);
+                songs.add(acte);
+                System.out.print(acte + "\n");
             }
         }
         catch (Exception e) {
-            log.log(Level.SEVERE, e.getMessage());
+            //log.log(Level.SEVERE, e.getMessage());
         }
-        finally { close(); }
-        return actes;
+        finally { close(expr, conn); }
+        return songs;
     }
 
-    private void close() {
+    private void close(XQPreparedExpression expr, XQConnection conn) {
         try {
-            this.expr.close();
-            this.conn.close();
+            expr.close();
+            conn.close();
         } catch (XQException e) {
-            log.log(Level.SEVERE, e.getMessage());
+            // log.log(Level.SEVERE, e.getMessage());
         }
     }
 

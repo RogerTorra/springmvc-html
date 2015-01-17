@@ -61,29 +61,6 @@ public class XMLConnectionTest {
         //copy(xml,testFile);
     }
 
-    @Test
-    public void stepOneTest() throws IOException, XQException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException {
-        String eventXQ =
-                " declare variable $doc external;\n" +
-                        "for $x in $doc return $x//acte/nom/text()";
-
-        url = new URL("http://w10.bcn.es/APPS/asiasiacache/peticioXmlAsia?id=203");
-
-        URLConnection urlconn = url.openConnection();
-        urlconn.setReadTimeout(50000);
-        InputStream xml = urlconn.getInputStream();
-        //TODO Change local path file
-        OutputStream testFile = new FileOutputStream(testXmlRoute);
-        copy(xml,testFile);
-
-        XMLConnection testcon = new XMLConnection(eventXQ, url);
-        ArrayList<Acte> result = testcon.getEvents();
-        System.out.println("test:");
-        System.out.println(result.size());
-        assertEquals(54,result.size());
-
-    }
-
     //@Test
     public void staticFileTest() throws ClassNotFoundException, IllegalAccessException, InstantiationException, XQException, FileNotFoundException {
 
