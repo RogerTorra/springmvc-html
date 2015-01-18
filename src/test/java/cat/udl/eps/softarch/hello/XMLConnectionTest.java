@@ -1,24 +1,19 @@
 package cat.udl.eps.softarch.hello;
-import cat.udl.eps.softarch.hello.model.Acte;
-import cat.udl.eps.softarch.hello.repository.XMLConnection;
-import org.junit.Before;
+import cat.udl.eps.softarch.hello.model.Event;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+
 import static org.junit.Assert.*;
-import javax.validation.constraints.AssertTrue;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.xquery.*;
-import net.sf.saxon.xqj.*;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.io.*;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * Created by roger on 17/12/2014.
@@ -127,32 +122,32 @@ public class XMLConnectionTest {
         expr = conn.prepareExpression(xquery);
         expr.bindDocument(new javax.xml.namespace.QName("doc"), urlconn.getInputStream(), null, null);
 
-        jaxbContext = JAXBContext.newInstance(Acte.class);
+        jaxbContext = JAXBContext.newInstance(Event.class);
         jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
 
         OutputStream testFile = new FileOutputStream(testXmlRoute);
 
-        List<Acte> actes= getActes(jaxbUnmarshaller,expr,conn);
+        List<Event> events = getActes(jaxbUnmarshaller,expr,conn);
 
         //System.out.print(getActes(jaxbUnmarshaller,expr,conn));
 
-        assertTrue(!actes.isEmpty());
+        assertTrue(!events.isEmpty());
     }
 
 
 
-    ArrayList<Acte> getActes(Unmarshaller jaxbUnmarshaller,XQPreparedExpression expr, XQConnection conn) {
-        ArrayList<Acte> songs = new ArrayList<Acte>();
+    ArrayList<Event> getActes(Unmarshaller jaxbUnmarshaller,XQPreparedExpression expr, XQConnection conn) {
+        ArrayList<Event> songs = new ArrayList<Event>();
         try {
             XQResultSequence rs = expr.executeQuery();
 
 
             while (rs.next()) {
                 XQItem item = rs.getItem();
-                Acte acte = (Acte) jaxbUnmarshaller.unmarshal(item.getNode());
-                songs.add(acte);
-                System.out.print(acte+"\n");
+                Event event = (Event) jaxbUnmarshaller.unmarshal(item.getNode());
+                songs.add(event);
+                System.out.print(event +"\n");
             }
         }
         catch (Exception e) {

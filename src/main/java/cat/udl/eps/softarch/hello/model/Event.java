@@ -7,14 +7,13 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.List;
 
 /**
  * Created by roger
  */
 @Entity
 @XmlRootElement
-public class Acte {
+public class Event {
 
     @Id
     private long id;
@@ -54,9 +53,9 @@ public class Acte {
 
 
 
-    public Acte() {}
+    public Event() {}
 
-    public Acte(String name, String init_date) {
+    public Event(String name, String init_date) {
         this.name = name;
         this.init_date = init_date;
     }
@@ -175,10 +174,10 @@ public class Acte {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Acte acte = (Acte) o;
+        Event event = (Event) o;
 
-        if (id != acte.id) return false;
-        if (!name.equals(acte.name)) return false;
+        if (id != event.id) return false;
+        if (!name.equals(event.name)) return false;
 
         return true;
     }

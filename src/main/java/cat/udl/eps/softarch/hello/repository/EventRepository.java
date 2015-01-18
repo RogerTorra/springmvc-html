@@ -1,14 +1,13 @@
 package cat.udl.eps.softarch.hello.repository;
 
-import cat.udl.eps.softarch.hello.model.Acte;
-import cat.udl.eps.softarch.hello.model.Greeting;
+import cat.udl.eps.softarch.hello.model.Event;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
  * Created by http://rhizomik.net/~roberto/
  */
 
-public interface ActesRepository extends PagingAndSortingRepository<Acte, Long> {
+public interface EventRepository extends PagingAndSortingRepository<Event, Long> {
 
     // PagingAndSortingRepository provides:
     // exists(ID id), delete(T entity), findAll(Pageable), findAll(Sort), findOne(ID id), save(T entity),...

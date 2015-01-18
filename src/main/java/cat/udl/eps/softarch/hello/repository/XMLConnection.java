@@ -1,6 +1,6 @@
 package cat.udl.eps.softarch.hello.repository;
 
-import cat.udl.eps.softarch.hello.model.Acte;
+import cat.udl.eps.softarch.hello.model.Event;
 
 import org.w3c.dom.Node;
 import javax.xml.bind.JAXBContext;
@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.StringWriter;
 /**
@@ -43,7 +42,7 @@ public class XMLConnection {
         this.expr = conn.prepareExpression(xquery);
         this.expr.bindDocument(new javax.xml.namespace.QName("doc"), urlconn.getInputStream(), null, null);
 
-        this.jaxbContext = JAXBContext.newInstance(Acte.class);
+        this.jaxbContext = JAXBContext.newInstance(Event.class);
         this.jaxbUnmarshaller = jaxbContext.createUnmarshaller();
     }
 
@@ -51,16 +50,16 @@ public class XMLConnection {
 
     }
 
-    public ArrayList<Acte> getActes(Unmarshaller jaxbUnmarshaller,XQPreparedExpression expr, XQConnection conn) {
-        ArrayList<Acte> songs = new ArrayList<Acte>();
+    public ArrayList<Event> getActes(Unmarshaller jaxbUnmarshaller,XQPreparedExpression expr, XQConnection conn) {
+        ArrayList<Event> songs = new ArrayList<Event>();
         try {
             XQResultSequence rs = expr.executeQuery();
 
 
             while (rs.next()) {
                 XQItem item = rs.getItem();
-                Acte acte = (Acte) jaxbUnmarshaller.unmarshal(item.getNode());
-                songs.add(acte);
+                Event event = (Event) jaxbUnmarshaller.unmarshal(item.getNode());
+                songs.add(event);
                 //System.out.print(acte + "\n");
             }
         }
