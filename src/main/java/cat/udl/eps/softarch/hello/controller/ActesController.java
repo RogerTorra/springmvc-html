@@ -3,6 +3,8 @@ package cat.udl.eps.softarch.hello.controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Date;
 
 import cat.udl.eps.softarch.hello.model.Acte;
@@ -42,10 +44,11 @@ public class ActesController {
         int count=0;
         try {
 
+            URL url;
             XQPreparedExpression expr;
             XQConnection conn;
             //TODO Change local path file
-            InputStream testFile = new FileInputStream("C:\\Users\\roger\\IdeaProjects\\springmvc-html\\src\\test\\java\\cat\\udl\\eps\\softarch\\hello\\testXML.xml");
+            //InputStream testFile = new FileInputStream("/home/hellfish90/IdeaProjects/springmvc-html/src/test/java/cat/udl/eps/softarch/hello/testXML.xml");
             String xqueryString =
                     "declare variable $doc  external;\n"
                             + "for $r in $doc /response/body/resultat/actes/* \n"
@@ -66,10 +69,16 @@ public class ActesController {
                             + "  <y>{$r/lloc_simple/adreca_simple/coordenades/geocodificacio/data(@y)}</y>\n"
                             + "</acte>";
 
+
+            url = new URL("http://w10.bcn.es/APPS/asiasiacache/peticioXmlAsia?id=203");
+
+            URLConnection urlconn = url.openConnection();
+            urlconn.setReadTimeout(50000);
+
             XQDataSource xqds = (XQDataSource)Class.forName("net.sf.saxon.xqj.SaxonXQDataSource").newInstance();
             conn = xqds.getConnection();
             expr = conn.prepareExpression(xqueryString);
-            expr.bindDocument(new javax.xml.namespace.QName("doc"), testFile, null, null);
+            expr.bindDocument(new javax.xml.namespace.QName("doc"), urlconn.getInputStream(), null, null);
 
             XQResultSequence rs = expr.executeQuery();
             XMLConnection xmlPars = new XMLConnection();
