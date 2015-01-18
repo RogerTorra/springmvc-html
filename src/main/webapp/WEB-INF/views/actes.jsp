@@ -4,6 +4,9 @@
 <html>
 <body>
 <h2>Actes List</h2>
+
+<a href="/favorite"><h3>Favorite</h3></a>
+
 <ul>
     <c:if test="${not empty actes}">
         <c:forEach var="acte" items="${actes}">

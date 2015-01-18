@@ -3,7 +3,9 @@ package cat.udl.eps.softarch.hello.controller;
 import cat.udl.eps.softarch.hello.model.Acte;
 import cat.udl.eps.softarch.hello.model.Favorite;
 import cat.udl.eps.softarch.hello.model.User;
+import cat.udl.eps.softarch.hello.repository.EventRepository;
 import cat.udl.eps.softarch.hello.repository.FavoriteRepository;
+import cat.udl.eps.softarch.hello.repository.UserRepository;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,16 +43,18 @@ public class FavoriteController {
     @ResponseBody
     public Iterable<Favorite> list(@RequestParam(required=false, defaultValue="0") int page,
                                @RequestParam(required=false, defaultValue="10") int size,
-                               @RequestParam(required=false, defaultValue="10") User user) {
+                               @RequestParam(required=false, defaultValue="") String user) {
 
+        favoriteRepository.save(GenerateTestFavorite());
+        System.out.print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+favoriteRepository.findAll());
 
-        return favoriteRepository.findFavoritesByUser(user);
+        return favoriteRepository.findAll();
     }
     @RequestMapping(method=RequestMethod.GET, produces="text/html")
     public ModelAndView listHTML(@RequestParam(required=false, defaultValue="0") int page,
                                  @RequestParam(required=false, defaultValue="10") int size,
-                                 @RequestParam(required=false, defaultValue="10") User user) {
-        return new ModelAndView("actes", "actes", list(page, size,user));
+                                 @RequestParam(required=false, defaultValue="") String user) {
+        return new ModelAndView("favorites", "favorites", list(page, size,user));
     }
 
     // RETRIEVE
@@ -72,24 +76,28 @@ public class FavoriteController {
     @ResponseBody
     public Favorite create(@Valid @RequestBody Favorite favorite, HttpServletResponse response) {
         logger.info("Creating acte with nom'{}'", favorite.toString());
-        response.setHeader("Location", "/favorite/" + favoriteRepository.save(favorite).toString());
+        response.setHeader("Location", "/favorite/form" + favoriteRepository.save(favorite).toString());
         return favorite;
     }
     @RequestMapping(method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded", produces="text/html")
     public String createHTML(@Valid @ModelAttribute("acte") Favorite favorite, BindingResult binding, HttpServletResponse response) {
         if (binding.hasErrors()) {
             logger.info("Validation error: {}", binding);
-            return "form";
+            return "form_favorite";
         }
-        return "redirect:/actes/"+create(favorite, response).getId();
+        return "redirect:/favorite/"+create(favorite, response).getId();
     }
     // Create form
     @RequestMapping(value = "/form", method = RequestMethod.GET, produces = "text/html")
     public ModelAndView createForm() {
         logger.info("Generating form for favorite creation");
-        Acte emptyActe = new Acte();
-        emptyActe.setInit_date(new Date().toString());
-        return new ModelAndView("form", "favorite", emptyActe);
+
+
+
+
+        Favorite emptyFavorite = GenerateTestFavorite();
+
+        return new ModelAndView("form_favorite","favorite", emptyFavorite);
     }
 
     // UPDATE
@@ -146,5 +154,26 @@ public class FavoriteController {
             fav.reminderEvent(Calendar.getInstance().getTime());
         }
 
+    }
+
+
+    @Autowired
+    EventRepository event;
+
+    @Autowired
+    UserRepository users;
+
+    private Favorite GenerateTestFavorite(){
+
+        Acte act = event.findAll().iterator().next();
+
+        User user = new User("Marc","marc@lala.com");
+
+        users.save(user);
+
+        Favorite fav = new Favorite(act,user,Calendar.getInstance().getTime());
+
+
+        return fav;
     }
 }

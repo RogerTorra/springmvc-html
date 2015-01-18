@@ -53,4 +53,13 @@ public class User {
     public void removeActe(Acte acte) {
         actes.remove(acte);
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }

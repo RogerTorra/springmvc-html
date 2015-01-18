@@ -1,9 +1,9 @@
 package cat.udl.eps.softarch.hello.model;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -16,17 +16,20 @@ public class Favorite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank(message = "Event cannot be blank")
+    @NotNull
     @OneToOne // need to review the relationship
             Acte acte;
 
-    @NotBlank(message = "User cannot be blank")
+    @NotNull
     @OneToOne // need to review the relationship
     User user;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     Date recordHour;
 
+    public Favorite(){
+
+    }
 
     public Favorite(Acte acte, User user, Date recordHour) {
         this.acte = acte;
@@ -97,9 +100,8 @@ public class Favorite {
 
     @Override
     public int hashCode() {
-        int result = acte.hashCode();
-        result = 31 * result + user.hashCode();
-        result = 31 * result + recordHour.hashCode();
+        int result = 0;
+
         return result;
     }
 
