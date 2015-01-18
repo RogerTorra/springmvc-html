@@ -69,7 +69,6 @@ public class EventController {
 
             for (Acte acte : xmlPars.getActes()) {
                 eventRepository.save(acte).getId();
-
                 count++;
 
             }
@@ -96,7 +95,6 @@ public class EventController {
                                @RequestParam(required=false, defaultValue="10") int size) {
         size = retriveXMLEvent();
 
-        System.out.print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+size);
         PageRequest request = new PageRequest(page, size);
         return eventRepository.findAll(request).getContent();
     }

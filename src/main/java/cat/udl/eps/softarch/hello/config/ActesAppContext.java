@@ -28,7 +28,7 @@ import javax.sql.DataSource;
 @ComponentScan("cat.udl.eps.softarch.hello")
 @EnableJpaRepositories("cat.udl.eps.softarch.hello.repository")
 @EnableTransactionManagement
-public class GreetingsAppContext extends WebMvcConfigurerAdapter{
+public class ActesAppContext extends WebMvcConfigurerAdapter{
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

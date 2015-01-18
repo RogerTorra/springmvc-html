@@ -46,7 +46,6 @@ public class FavoriteController {
                                @RequestParam(required=false, defaultValue="") String user) {
 
         favoriteRepository.save(GenerateTestFavorite());
-        System.out.print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+favoriteRepository.findAll());
 
         return favoriteRepository.findAll();
     }

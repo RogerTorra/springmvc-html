@@ -6,7 +6,7 @@ import cat.udl.eps.softarch.hello.model.User;
 /**
  * Created by roger on 17/01/2015.
  */
-public interface UserActesService {
+public interface UserFavoriteService {
     User getUserAndActes(Long userId);
 
     Acte addActeToUser(Acte acte);

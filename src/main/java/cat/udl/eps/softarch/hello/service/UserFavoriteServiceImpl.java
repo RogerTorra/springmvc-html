@@ -15,8 +15,8 @@ import cat.udl.eps.softarch.hello.repository.UserRepository;
  * Created by roger on 17/01/2015.
  */
 @Service
-public class UserActesServiceImpl implements UserActesService{
-    final Logger logger = LoggerFactory.getLogger(UserActesServiceImpl.class);
+public class UserFavoriteServiceImpl implements UserFavoriteService {
+    final Logger logger = LoggerFactory.getLogger(UserFavoriteServiceImpl.class);
 
     @Autowired
     EventRepository eventRepository;

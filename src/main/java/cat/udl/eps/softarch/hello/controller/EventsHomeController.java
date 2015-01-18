@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 
 @Controller
 @RequestMapping(value = "/")
-public class GreetingHomeController {
-    final Logger logger = LoggerFactory.getLogger(GreetingHomeController.class);
+public class EventsHomeController {
+    final Logger logger = LoggerFactory.getLogger(EventsHomeController.class);
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String redirect() {
         logger.info("Redirect to home page");

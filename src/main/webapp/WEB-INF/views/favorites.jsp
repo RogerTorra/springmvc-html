@@ -3,7 +3,9 @@
 <%@taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <html>
 <body>
-<h2>Actes List</h2>
+<h2>Favorites List</h2>
+
+<a href="/actes/"><h3>List</h3></a>
 
 <a href="/favorite/form"><h3>Create</h3></a>
 <ul>

@@ -31,7 +31,7 @@ import java.net.URISyntaxException;
 @ComponentScan("cat.udl.eps.softarch.hello")
 @EnableJpaRepositories("cat.udl.eps.softarch.hello.repository")
 @EnableTransactionManagement
-public class GreetingsPostgresAppContext extends WebMvcConfigurerAdapter{
+public class ActesPostgresAppContext extends WebMvcConfigurerAdapter{
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
