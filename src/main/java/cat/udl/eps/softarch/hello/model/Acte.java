@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @XmlRootElement
-public class Event {
+public class Acte {
 
     @Id
     private long id;
@@ -53,9 +53,9 @@ public class Event {
 
 
 
-    public Event() {}
+    public Acte() {}
 
-    public Event(String name, String init_date) {
+    public Acte(String name, String init_date) {
         this.name = name;
         this.init_date = init_date;
     }
@@ -174,10 +174,10 @@ public class Event {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Event event = (Event) o;
+        Acte acte = (Acte) o;
 
-        if (id != event.id) return false;
-        if (!name.equals(event.name)) return false;
+        if (id != acte.id) return false;
+        if (!name.equals(acte.name)) return false;
 
         return true;
     }

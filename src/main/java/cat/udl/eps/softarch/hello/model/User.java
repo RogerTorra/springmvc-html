@@ -23,7 +23,7 @@ public class User {
     private String email;
 
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Event> events = new ArrayList<>();
+    private List<Acte> actes = new ArrayList<>();
 
     public User() { }
 
@@ -42,15 +42,15 @@ public class User {
 
     public void setEmail(String email) { this.email = email; }
 
-    public List<Event> getEvents() {
-        return events;
+    public List<Acte> getActes() {
+        return actes;
     }
 
-    public void addActe(Event newEvent) {
-        events.add(newEvent);
+    public void addActe(Acte newActe) {
+        actes.add(newActe);
     }
 
-    public void removeActe(Event event) {
-        events.remove(event);
+    public void removeActe(Acte acte) {
+        actes.remove(acte);
     }
 }

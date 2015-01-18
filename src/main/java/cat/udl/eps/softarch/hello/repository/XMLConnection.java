@@ -1,6 +1,6 @@
 package cat.udl.eps.softarch.hello.repository;
 
-import cat.udl.eps.softarch.hello.model.Event;
+import cat.udl.eps.softarch.hello.model.Acte;
 
 import org.w3c.dom.Node;
 import javax.xml.bind.JAXBContext;
@@ -34,43 +34,45 @@ public class XMLConnection {
 
     public XMLConnection(String xquery, URL url)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException, XQException, IOException, JAXBException {
+
+
         URLConnection urlconn = url.openConnection();
         urlconn.setReadTimeout(50000);
 
         XQDataSource xqds = (XQDataSource) Class.forName("net.sf.saxon.xqj.SaxonXQDataSource").newInstance();
-        this.conn = xqds.getConnection();
-        this.expr = conn.prepareExpression(xquery);
-        this.expr.bindDocument(new javax.xml.namespace.QName("doc"), urlconn.getInputStream(), null, null);
+        conn = xqds.getConnection();
+        expr = conn.prepareExpression(xquery);
+        expr.bindDocument(new javax.xml.namespace.QName("doc"), urlconn.getInputStream(), null, null);
 
-        this.jaxbContext = JAXBContext.newInstance(Event.class);
-        this.jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        jaxbContext = JAXBContext.newInstance(Acte.class);
+        jaxbUnmarshaller = jaxbContext.createUnmarshaller();
     }
 
     public XMLConnection() {
 
     }
 
-    public ArrayList<Event> getActes(Unmarshaller jaxbUnmarshaller,XQPreparedExpression expr, XQConnection conn) {
-        ArrayList<Event> songs = new ArrayList<Event>();
+    public ArrayList<Acte> getActes() {
+        ArrayList<Acte> songs = new ArrayList<Acte>();
         try {
             XQResultSequence rs = expr.executeQuery();
 
 
             while (rs.next()) {
                 XQItem item = rs.getItem();
-                Event event = (Event) jaxbUnmarshaller.unmarshal(item.getNode());
-                songs.add(event);
+                Acte acte = (Acte) jaxbUnmarshaller.unmarshal(item.getNode());
+                songs.add(acte);
                 //System.out.print(acte + "\n");
             }
         }
         catch (Exception e) {
             //log.log(Level.SEVERE, e.getMessage());
         }
-        finally { close(expr, conn); }
+        finally { close(); }
         return songs;
     }
 
-    private void close(XQPreparedExpression expr, XQConnection conn) {
+    private void close() {
         try {
             expr.close();
             conn.close();

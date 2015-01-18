@@ -1,7 +1,7 @@
 package cat.udl.eps.softarch.hello.service;
 import java.util.Objects;
 
-import cat.udl.eps.softarch.hello.model.Event;
+import cat.udl.eps.softarch.hello.model.Acte;
 import cat.udl.eps.softarch.hello.repository.EventRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,13 +26,13 @@ public class UserActesServiceImpl implements UserActesService{
     @Override
     public User getUserAndActes(Long userId) {
         User u = userRepository.findOne(userId);
-        logger.info("User {} has {} actes", u.getUsername(), u.getEvents().size());
+        logger.info("User {} has {} actes", u.getUsername(), u.getActes().size());
         return u;
     }
 
     @Transactional
     @Override
-    public Event addActeToUser(Event g) {
+    public Acte addActeToUser(Acte g) {
         User u = userRepository.findUserById(g.getId());
         if (u == null) {
             String email = Objects.toString(g.getId(), null);
@@ -48,7 +48,7 @@ public class UserActesServiceImpl implements UserActesService{
     @Transactional
     @Override
     public void removeActeFromUser(Long acteId) {
-        Event g = eventRepository.findOne(acteId);
+        Acte g = eventRepository.findOne(acteId);
         User u = userRepository.findUserById(g.getId());
         if (u != null) {
             u.removeActe(g);

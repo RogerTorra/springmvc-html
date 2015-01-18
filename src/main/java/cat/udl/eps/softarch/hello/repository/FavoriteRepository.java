@@ -1,6 +1,5 @@
 package cat.udl.eps.softarch.hello.repository;
 
-import cat.udl.eps.softarch.hello.model.Event;
 import cat.udl.eps.softarch.hello.model.Favorite;
 import cat.udl.eps.softarch.hello.model.User;
 import org.springframework.data.repository.PagingAndSortingRepository;

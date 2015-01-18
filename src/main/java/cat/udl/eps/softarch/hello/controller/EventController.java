@@ -2,10 +2,9 @@ package cat.udl.eps.softarch.hello.controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Date;
 
-import cat.udl.eps.softarch.hello.model.Event;
+import cat.udl.eps.softarch.hello.model.Acte;
 import cat.udl.eps.softarch.hello.repository.EventRepository;
 import cat.udl.eps.softarch.hello.repository.XMLConnection;
 import com.google.common.base.Preconditions;
@@ -36,16 +35,11 @@ public class EventController {
 
     @Autowired
     EventRepository eventRepository;
-    JAXBContext  jaxbContext;
-    Unmarshaller jaxbUnmarshaller;
 
     private int retriveXMLEvent(){
         int count=0;
         try {
 
-            URL url;
-            XQPreparedExpression expr;
-            XQConnection conn;
             //TODO Change local path file
             //InputStream testFile = new FileInputStream("/home/hellfish90/IdeaProjects/springmvc-html/src/test/java/cat/udl/eps/softarch/hello/testXML.xml");
             String xqueryString =
@@ -69,23 +63,13 @@ public class EventController {
                             + "</acte>";
 
 
-            url = new URL("http://w10.bcn.es/APPS/asiasiacache/peticioXmlAsia?id=203");
+            URL url = new URL("http://w10.bcn.es/APPS/asiasiacache/peticioXmlAsia?id=203");
 
-            URLConnection urlconn = url.openConnection();
-            urlconn.setReadTimeout(50000);
+            XMLConnection xmlPars = new XMLConnection(xqueryString,url);
 
-            XQDataSource xqds = (XQDataSource)Class.forName("net.sf.saxon.xqj.SaxonXQDataSource").newInstance();
-            conn = xqds.getConnection();
-            expr = conn.prepareExpression(xqueryString);
-            expr.bindDocument(new javax.xml.namespace.QName("doc"), urlconn.getInputStream(), null, null);
+            for (Acte acte : xmlPars.getActes()) {
+                eventRepository.save(acte).getId();
 
-            XQResultSequence rs = expr.executeQuery();
-            XMLConnection xmlPars = new XMLConnection();
-            jaxbContext = JAXBContext.newInstance(Event.class);
-            jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-            for (Event event : xmlPars.getActes(jaxbUnmarshaller,expr,conn)) {
-                eventRepository.save(event).getId();
                 count++;
 
             }
@@ -108,9 +92,11 @@ public class EventController {
     // LIST
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Iterable<Event> list(@RequestParam(required=false, defaultValue="0") int page,
+    public Iterable<Acte> list(@RequestParam(required=false, defaultValue="0") int page,
                                @RequestParam(required=false, defaultValue="10") int size) {
         size = retriveXMLEvent();
+
+        System.out.print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+size);
         PageRequest request = new PageRequest(page, size);
         return eventRepository.findAll(request).getContent();
     }
@@ -123,7 +109,7 @@ public class EventController {
     // RETRIEVE
     @RequestMapping(value = "/{id}", method = RequestMethod.GET )
     @ResponseBody
-    public Event retrieve(@PathVariable( "id" ) Long id) {
+    public Acte retrieve(@PathVariable( "id" ) Long id) {
         logger.info("Retrieving acte number {}", id);
         Preconditions.checkNotNull(eventRepository.findOne(id), "Acte with id %s not found", id);
         return eventRepository.findOne(id);
@@ -137,49 +123,49 @@ public class EventController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public Event create(@Valid @RequestBody Event event, HttpServletResponse response) {
-        logger.info("Creating acte with nom'{}'", event.getName());
-        response.setHeader("Location", "/actes/" + eventRepository.save(event).getId());
-        return event;
+    public Acte create(@Valid @RequestBody Acte acte, HttpServletResponse response) {
+        logger.info("Creating acte with nom'{}'", acte.getName());
+        response.setHeader("Location", "/actes/" + eventRepository.save(acte).getId());
+        return acte;
     }
     @RequestMapping(method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded", produces="text/html")
-    public String createHTML(@Valid @ModelAttribute("acte") Event event, BindingResult binding, HttpServletResponse response) {
+    public String createHTML(@Valid @ModelAttribute("acte") Acte acte, BindingResult binding, HttpServletResponse response) {
         if (binding.hasErrors()) {
             logger.info("Validation error: {}", binding);
             return "form";
         }
-        return "redirect:/actes/"+create(event, response).getId();
+        return "redirect:/actes/"+create(acte, response).getId();
     }
     // Create form
     @RequestMapping(value = "/form", method = RequestMethod.GET, produces = "text/html")
     public ModelAndView createForm() {
         logger.info("Generating form for actes creation");
-        Event emptyEvent = new Event();
-        emptyEvent.setInit_date(new Date().toString());
-        return new ModelAndView("form", "acte", emptyEvent);
+        Acte emptyActe = new Acte();
+        emptyActe.setInit_date(new Date().toString());
+        return new ModelAndView("form", "acte", emptyActe);
     }
 
     // UPDATE
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Event update(@PathVariable("id") Long id, @Valid @RequestBody Event event) {
-        logger.info("Updating acte {}, new name is '{}'", id, event.getName());
+    public Acte update(@PathVariable("id") Long id, @Valid @RequestBody Acte acte) {
+        logger.info("Updating acte {}, new name is '{}'", id, acte.getName());
         Preconditions.checkNotNull(eventRepository.findOne(id), "Acte with id %s not found", id);
-        Event updateEvent = eventRepository.findOne(id);
-        updateEvent.setName(event.getName());
-        updateEvent.setInit_date(event.getInit_date());
-        return eventRepository.save(updateEvent);
+        Acte updateActe = eventRepository.findOne(id);
+        updateActe.setName(acte.getName());
+        updateActe.setInit_date(acte.getInit_date());
+        return eventRepository.save(updateActe);
     }
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = "application/x-www-form-urlencoded")
     @ResponseStatus(HttpStatus.OK)
-    public String updateHTML(@PathVariable("id") Long id, @Valid @ModelAttribute("acte") Event event,
+    public String updateHTML(@PathVariable("id") Long id, @Valid @ModelAttribute("acte") Acte acte,
                              BindingResult binding) {
         if (binding.hasErrors()) {
             logger.info("Validation error: {}", binding);
             return "form";
         }
-        return "redirect:/actes/"+update(id, event).getId();
+        return "redirect:/actes/"+update(id, acte).getId();
     }
     // Update form
     @RequestMapping(value = "/{id}/form", method = RequestMethod.GET, produces = "text/html")

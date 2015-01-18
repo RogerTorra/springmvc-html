@@ -1,6 +1,6 @@
 package cat.udl.eps.softarch.hello.controller;
 
-import cat.udl.eps.softarch.hello.model.Event;
+import cat.udl.eps.softarch.hello.model.Acte;
 import cat.udl.eps.softarch.hello.model.Favorite;
 import cat.udl.eps.softarch.hello.model.User;
 import cat.udl.eps.softarch.hello.repository.FavoriteRepository;
@@ -87,9 +87,9 @@ public class FavoriteController {
     @RequestMapping(value = "/form", method = RequestMethod.GET, produces = "text/html")
     public ModelAndView createForm() {
         logger.info("Generating form for favorite creation");
-        Event emptyEvent = new Event();
-        emptyEvent.setInit_date(new Date().toString());
-        return new ModelAndView("form", "favorite", emptyEvent);
+        Acte emptyActe = new Acte();
+        emptyActe.setInit_date(new Date().toString());
+        return new ModelAndView("form", "favorite", emptyActe);
     }
 
     // UPDATE
@@ -100,7 +100,7 @@ public class FavoriteController {
         logger.info("Updating acte {}, new name is '{}'", id, favorite.toString());
         Preconditions.checkNotNull(favoriteRepository.findOne(id), "Acte with id %s not found", id);
         Favorite updateFavorite = favoriteRepository.findOne(id);
-        updateFavorite.setEvent(favorite.getEvent());
+        updateFavorite.setActe(favorite.getActe());
         updateFavorite.setUser(favorite.getUser());
         return favoriteRepository.save(updateFavorite);
     }

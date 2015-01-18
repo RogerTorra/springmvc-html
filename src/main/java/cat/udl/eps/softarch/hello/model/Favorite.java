@@ -2,7 +2,7 @@ package cat.udl.eps.softarch.hello.model;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
-import sun.util.calendar.BaseCalendar;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -18,7 +18,7 @@ public class Favorite {
 
     @NotBlank(message = "Event cannot be blank")
     @OneToOne // need to review the relationship
-    Event event;
+            Acte acte;
 
     @NotBlank(message = "User cannot be blank")
     @OneToOne // need to review the relationship
@@ -28,15 +28,15 @@ public class Favorite {
     Date recordHour;
 
 
-    public Favorite(Event event, User user, Date recordHour) {
-        this.event = event;
+    public Favorite(Acte acte, User user, Date recordHour) {
+        this.acte = acte;
         this.user = user;
         this.recordHour = recordHour;
     }
 
     public void reminderEvent(Date currentData){
 
-        if (event.getInit_date().equals(currentData)){
+        if (acte.getInit_date().equals(currentData)){
             sendMail();
         }
 
@@ -57,12 +57,12 @@ public class Favorite {
         return id;
     }
 
-    public Event getEvent() {
-        return event;
+    public Acte getActe() {
+        return acte;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setActe(Acte acte) {
+        this.acte = acte;
     }
 
     public Date getRecordHour() {
@@ -88,7 +88,7 @@ public class Favorite {
 
         Favorite favorite = (Favorite) o;
 
-        if (!event.equals(favorite.event)) return false;
+        if (!acte.equals(favorite.acte)) return false;
         if (!recordHour.equals(favorite.recordHour)) return false;
         if (!user.equals(favorite.user)) return false;
 
@@ -97,7 +97,7 @@ public class Favorite {
 
     @Override
     public int hashCode() {
-        int result = event.hashCode();
+        int result = acte.hashCode();
         result = 31 * result + user.hashCode();
         result = 31 * result + recordHour.hashCode();
         return result;
@@ -106,7 +106,7 @@ public class Favorite {
     @Override
     public String toString() {
         return "Favorite{" +
-                "event=" + event +
+                "event=" + acte +
                 ", user=" + user +
                 ", recordHour=" + recordHour +
                 '}';

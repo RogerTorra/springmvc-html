@@ -1,5 +1,5 @@
 package cat.udl.eps.softarch.hello;
-import cat.udl.eps.softarch.hello.model.Event;
+import cat.udl.eps.softarch.hello.model.Acte;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -122,32 +122,32 @@ public class XMLConnectionTest {
         expr = conn.prepareExpression(xquery);
         expr.bindDocument(new javax.xml.namespace.QName("doc"), urlconn.getInputStream(), null, null);
 
-        jaxbContext = JAXBContext.newInstance(Event.class);
+        jaxbContext = JAXBContext.newInstance(Acte.class);
         jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
 
         OutputStream testFile = new FileOutputStream(testXmlRoute);
 
-        List<Event> events = getActes(jaxbUnmarshaller,expr,conn);
+        List<Acte> actes = getActes(jaxbUnmarshaller,expr,conn);
 
-        //System.out.print(getActes(jaxbUnmarshaller,expr,conn));
+        System.out.print(getActes(jaxbUnmarshaller,expr,conn));
 
-        assertTrue(!events.isEmpty());
+        assertTrue(!actes.isEmpty());
     }
 
 
 
-    ArrayList<Event> getActes(Unmarshaller jaxbUnmarshaller,XQPreparedExpression expr, XQConnection conn) {
-        ArrayList<Event> songs = new ArrayList<Event>();
+    ArrayList<Acte> getActes(Unmarshaller jaxbUnmarshaller,XQPreparedExpression expr, XQConnection conn) {
+        ArrayList<Acte> songs = new ArrayList<Acte>();
         try {
             XQResultSequence rs = expr.executeQuery();
 
 
             while (rs.next()) {
                 XQItem item = rs.getItem();
-                Event event = (Event) jaxbUnmarshaller.unmarshal(item.getNode());
-                songs.add(event);
-                System.out.print(event +"\n");
+                Acte acte = (Acte) jaxbUnmarshaller.unmarshal(item.getNode());
+                songs.add(acte);
+                System.out.print(acte +"\n");
             }
         }
         catch (Exception e) {
