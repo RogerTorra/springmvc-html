@@ -34,6 +34,28 @@ public class Favorite {
         this.recordHour = recordHour;
     }
 
+    public void reminderEvent(Date currentData){
+
+        if (event.getInit_date().equals(currentData)){
+            sendMail();
+        }
+
+    }
+
+    private void sendMail(){
+
+        String email =user.getEmail();
+
+        /**
+         * Review how to send mail
+         *
+         */
+
+    }
+
+    public long getId() {
+        return id;
+    }
 
     public Event getEvent() {
         return event;
