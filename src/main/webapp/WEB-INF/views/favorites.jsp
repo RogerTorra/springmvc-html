@@ -7,7 +7,6 @@
 
 <a href="/actes/"><h3>List</h3></a>
 
-<a href="/favorite/form"><h3>Create</h3></a>
 <ul>
     <c:if test="${not empty favorites}">
         <c:forEach var="favorites" items="${favorites}">

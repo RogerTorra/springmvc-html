@@ -17,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.xml.bind.JAXBContext;
@@ -39,10 +38,10 @@ public class FavoriteController {
     FavoriteRepository favoriteRepository;
 
     @Autowired
-    EventRepository event;
+    UserRepository userRepository;
 
     @Autowired
-    UserRepository users;
+    EventRepository eventRepository;
 
     JAXBContext  jaxbContext;
     Unmarshaller jaxbUnmarshaller;
@@ -53,9 +52,9 @@ public class FavoriteController {
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ModelAndView listFavorite(HttpServletRequest request, Model model){
         // this way you get value of the input you want
-        Long idUser = Long.valueOf(request.getParameter("iduser"));
+        String idUser =request.getParameter("email");
 
-        User u=users.findUserById(idUser);
+        User u=userRepository.findUserByEmail(idUser);
 
         return new ModelAndView("favorites","favorites",favoriteRepository.findFavoritesByUser(u));
     }
@@ -67,7 +66,7 @@ public class FavoriteController {
                                @RequestParam(required=false, defaultValue="10") int size,
                                @RequestParam(required=false, defaultValue="") String user) {
 
-        favoriteRepository.save(GenerateTestFavorite());
+
 
         return favoriteRepository.findAll();
     }
@@ -93,21 +92,19 @@ public class FavoriteController {
     }
 
 
-    @Autowired
-    UserRepository userRepository;
 
-    @Autowired
-    EventRepository eventRepository;
 
     @RequestMapping(method = RequestMethod.POST)
     public String createFavorite(HttpServletRequest request, Model model){
         // this way you get value of the input you want
-        Long idUser = Long.valueOf(request.getParameter("iduser"));
+        String idUser = request.getParameter("email");
         Long idActe = Long.valueOf(request.getParameter("idacte"));
         String data = request.getParameter("data");
 
-        User u =users.findUserById(idUser);
-        Acte act= event.findActeById(idActe);
+        User u =userRepository.findUserByEmail(idUser);
+        Acte act= eventRepository.findActeById(idActe);
+
+        logger.info(u+" "+act);
 
         favoriteRepository.save(new Favorite(act,u,new Date()));
 
@@ -202,14 +199,14 @@ public class FavoriteController {
         }
     }
 
-
+/*
     private Favorite GenerateTestFavorite(){
 
         Acte act = event.findAll().iterator().next();
 
-        User user = new User("Marc","marc@lala.com");
-        User user1 = new User("Roger","roger@lala.com");
-        User user2 = new User("Roberto","roberto@lala.com");
+        User user = new User("marc@lala.com");
+        User user1 = new User("roger@lala.com");
+        User user2 = new User("roberto@lala.com");
 
         users.save(user);
         users.save(user1);
@@ -224,7 +221,7 @@ public class FavoriteController {
 
         return fav;
     }
-
+*/
 
     public class JsonResponse {
 

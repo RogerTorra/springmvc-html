@@ -92,7 +92,6 @@ public class Favorite {
         Favorite favorite = (Favorite) o;
 
         if (!acte.equals(favorite.acte)) return false;
-        if (!recordHour.equals(favorite.recordHour)) return false;
         if (!user.equals(favorite.user)) return false;
 
         return true;
@@ -100,8 +99,8 @@ public class Favorite {
 
     @Override
     public int hashCode() {
-        int result = 0;
-
+        int result = acte.hashCode();
+        result = 31 * result + user.hashCode();
         return result;
     }
 

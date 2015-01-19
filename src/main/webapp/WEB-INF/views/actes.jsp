@@ -6,6 +6,7 @@
 <h2>Actes List</h2>
 
 <a href="/favorite"><h3>Favorite</h3></a>
+<a href="/users"><h3>Users</h3></a>
 
 <ul>
     <c:if test="${not empty actes}">

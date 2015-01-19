@@ -24,8 +24,8 @@ public class User {
 
     public User() { }
 
-    public User(String username, String email) {
-        this.username = username;
+    public User(String email) {
+        this.username = email.split("@")[0];
         this.email = email;
     }
 
@@ -39,6 +39,26 @@ public class User {
 
     public void setEmail(String email) { this.email = email; }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (!email.equals(user.email)) return false;
+        if (!username.equals(user.username)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = username.hashCode();
+        result = 31 * result + email.hashCode();
+        return result;
+    }
 
     @Override
     public String toString() {
