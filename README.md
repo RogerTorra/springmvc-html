@@ -1,4 +1,4 @@
-GreetingsApp
+Activities agenda (Agenda d'activitats)
 ============
 
 [![Build Status](https://travis-ci.org/RogerTorra/springmvc-html.svg?branch=master)](https://travis-ci.org/RogerTorra/springmvc-html)
@@ -23,4 +23,4 @@ Then run embedded Tomcat server:
 mvn exec:exec
 ```
 
-The application will be available at http://localhost:8080/greetings
+The application will be available at http://localhost:8080/
