@@ -1,7 +1,7 @@
 GreetingsApp
 ============
 
-[![Build Status](https://travis-ci.org/rogargon/greetingsApp.svg?branch=master)](https://travis-ci.org/rogargon/greetingsApp)
+[![Build Status](https://travis-ci.org/RogerTorra/springmvc-html.svg?branch=master)](https://travis-ci.org/RogerTorra/springmvc-html)
 
 This is a simple Spring demo of a Greetings application providing a RESTFul JSON API also available from an HTML user interface. It features:
 
