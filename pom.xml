@@ -17,6 +17,13 @@
 
     <dependencies>
 
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.13</version>
+        </dependency>
+
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -104,6 +111,7 @@
             <version>9.1.0.8</version>
             <systemPath>${basedir}/lib/saxon-9.1.0.8-xqj.jar</systemPath>
         </dependency> -->
+
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>

@@ -6,17 +6,19 @@ import cat.udl.eps.softarch.hello.model.User;
 import cat.udl.eps.softarch.hello.repository.EventRepository;
 import cat.udl.eps.softarch.hello.repository.FavoriteRepository;
 import cat.udl.eps.softarch.hello.repository.UserRepository;
+import cat.udl.eps.softarch.hello.service.FavoriteService;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -36,6 +38,8 @@ public class FavoriteController {
     FavoriteRepository favoriteRepository;
     JAXBContext  jaxbContext;
     Unmarshaller jaxbUnmarshaller;
+
+    FavoriteService favoriteService;
 
 
     // LIST
@@ -64,16 +68,42 @@ public class FavoriteController {
         Preconditions.checkNotNull(favoriteRepository.findOne(id), "Acte with id %s not found", id);
         return favoriteRepository.findOne(id);
     }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "text/html")
     public ModelAndView retrieveHTML(@PathVariable( "id" ) Long id) {
         return new ModelAndView("favorite", "favorite", retrieve(id));
     }
 
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    EventRepository eventRepository;
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String createFavorite(HttpServletRequest request, Model model){
+        // this way you get value of the input you want
+        Long idUser = Long.valueOf(request.getParameter("iduser"));
+        Long idActe = Long.valueOf(request.getParameter("idacte"));
+        String data = request.getParameter("data");
+
+        User u =users.findUserById(idUser);
+        Acte act= event.findActeById(idActe);
+
+        favoriteRepository.save(new Favorite(act,u,new Date()));
+
+        return "redirect:/search/result";
+    }
+
+
+
+/*
     // CREATE
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public Favorite create(@Valid @RequestBody Favorite favorite, HttpServletResponse response) {
+    public Favorite create(@Valid @RequestBody User user, HttpServletResponse response) {
         logger.info("Creating acte with nom'{}'", favorite.toString());
         response.setHeader("Location", "/favorite/form" + favoriteRepository.save(favorite).toString());
         return favorite;
@@ -97,7 +127,7 @@ public class FavoriteController {
         Favorite emptyFavorite = GenerateTestFavorite();
 
         return new ModelAndView("form_favorite","favorite", emptyFavorite);
-    }
+    }*/
 
     // UPDATE
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
@@ -152,9 +182,7 @@ public class FavoriteController {
         for(Favorite fav: favorites){
             fav.reminderEvent(Calendar.getInstance().getTime());
         }
-
     }
-
 
     @Autowired
     EventRepository event;
@@ -174,5 +202,17 @@ public class FavoriteController {
 
 
         return fav;
+    }
+
+
+    public class JsonResponse {
+
+        private String status = "";
+        private String errorMessage = "";
+
+        public JsonResponse(String status, String errorMessage) {
+            this.status = status;
+            this.errorMessage = errorMessage;
+        }
     }
 }
