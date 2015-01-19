@@ -34,7 +34,9 @@ public class FavoriteService {
     @Transactional
     Iterable<Favorite> getFavoritesByUserId(long id){
 
-        return favoriteRepository.findFavoritesByUser(id);
+
+
+        return favoriteRepository.findFavoritesByUser(userRepository.findUserById(id));
     }
 
     @Transactional

@@ -1,5 +1,4 @@
 package cat.udl.eps.softarch.hello.controller;
-import cat.udl.eps.softarch.hello.service.UserFavoriteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ public class UserController {
 
     @Autowired UserRepository userRepository;
     @Autowired
-    UserFavoriteService userFavoriteService;
+    UserRepository userFavoriteService;
 
     // LIST
     @RequestMapping(method = RequestMethod.GET)
@@ -43,7 +42,7 @@ public class UserController {
     public User retrieve(@PathVariable("id") Long id) {
         logger.info("Retrieving user number {}", id);
         Preconditions.checkNotNull(userRepository.findOne(id), "User with id %s not found", id);
-        return userFavoriteService.getUserAndActes(id);
+        return userFavoriteService.getOne(id);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "text/html")

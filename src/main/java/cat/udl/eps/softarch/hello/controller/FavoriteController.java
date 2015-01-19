@@ -24,6 +24,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * Created by http://rhizomik.net/~roberto/
@@ -36,11 +37,28 @@ public class FavoriteController {
 
     @Autowired
     FavoriteRepository favoriteRepository;
+
+    @Autowired
+    EventRepository event;
+
+    @Autowired
+    UserRepository users;
+
     JAXBContext  jaxbContext;
     Unmarshaller jaxbUnmarshaller;
 
     FavoriteService favoriteService;
 
+
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public ModelAndView listFavorite(HttpServletRequest request, Model model){
+        // this way you get value of the input you want
+        Long idUser = Long.valueOf(request.getParameter("iduser"));
+
+        User u=users.findUserById(idUser);
+
+        return new ModelAndView("favorites","favorites",favoriteRepository.findFavoritesByUser(u));
+    }
 
     // LIST
     @RequestMapping(method = RequestMethod.GET)
@@ -184,19 +202,22 @@ public class FavoriteController {
         }
     }
 
-    @Autowired
-    EventRepository event;
-
-    @Autowired
-    UserRepository users;
 
     private Favorite GenerateTestFavorite(){
 
         Acte act = event.findAll().iterator().next();
 
         User user = new User("Marc","marc@lala.com");
+        User user1 = new User("Roger","roger@lala.com");
+        User user2 = new User("Roberto","roberto@lala.com");
 
         users.save(user);
+        users.save(user1);
+        users.save(user2);
+
+        Random rand = new Random();
+
+
 
         Favorite fav = new Favorite(act,user,Calendar.getInstance().getTime());
 

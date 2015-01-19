@@ -22,9 +22,6 @@ public class User {
     @Email(message = "E-mail should be valid")
     private String email;
 
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Acte> actes = new ArrayList<>();
-
     public User() { }
 
     public User(String username, String email) {
@@ -42,17 +39,6 @@ public class User {
 
     public void setEmail(String email) { this.email = email; }
 
-    public List<Acte> getActes() {
-        return actes;
-    }
-
-    public void addActe(Acte newActe) {
-        actes.add(newActe);
-    }
-
-    public void removeActe(Acte acte) {
-        actes.remove(acte);
-    }
 
     @Override
     public String toString() {
